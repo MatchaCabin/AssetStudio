@@ -65,6 +65,7 @@ namespace AssetStudioCLI.Options
         PathID,
         NameOrContainer,
         NameAndContainer,
+		RegexpName,
     }
 
     internal enum CustomCompressionType
@@ -110,6 +111,8 @@ namespace AssetStudioCLI.Options
         public static Option<List<string>> o_filterByContainer;
         public static Option<List<string>> o_filterByPathID;
         public static Option<List<string>> o_filterByText;
+		//regexp filter
+		public static Option<string> o_regexpFilterByName;
         //advanced
         public static Option<CustomCompressionType> o_customCompressionType;
         public static Option<int> o_maxParallelExportTasks;
@@ -384,6 +387,17 @@ namespace AssetStudioCLI.Options
                 optionHelpGroup: HelpGroups.Filter
             );
             #endregion
+			
+			#region Init Regexp Filter Options
+			o_regexpFilterByName = new GroupedOption<string>
+            (
+                optionDefaultValue: "",
+                optionName: "--regexp-filter-by-name <text>",
+                optionDescription: "Specify the name by which assets should be filtered\n" ,
+                optionExample: "Example: \"--regexp-filter-by-name expression\"\n",
+                optionHelpGroup: HelpGroups.General
+            );
+			#endregion
 
             #region Init Advanced Options
             o_customCompressionType = new GroupedOption<CustomCompressionType>
@@ -956,6 +970,10 @@ namespace AssetStudioCLI.Options
                         case "--filter-by-text":
                             o_filterByText.Value.AddRange(ValueSplitter(value));
                             filterBy = FilterBy.NameOrContainer;
+                            break;
+						case "--regexp-filter-by-name":
+                            o_regexpFilterByName.Value = value;
+                            filterBy = FilterBy.RegexpName;
                             break;
                         case "--assembly-folder":
                             if (Directory.Exists(value))

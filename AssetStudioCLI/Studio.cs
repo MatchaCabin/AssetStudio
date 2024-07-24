@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 using static AssetStudioCLI.Exporter;
 using Ansi = AssetStudio.ColorConsole;
 
@@ -425,6 +426,12 @@ namespace AssetStudioCLI
                         $"that contain {$"\"{string.Join("\", \"", CLIOptions.o_filterByContainer.Value)}\"".Color(Ansi.BrightYellow)} in their Containers " +
                         $"and {$"\"{string.Join("\", \"", CLIOptions.o_filterByName.Value)}\"".Color(Ansi.BrightYellow)} in their Names."
                     );
+                    break;
+				case FilterBy.RegexpName:
+					Regex regex = new Regex(CLIOptions.o_regexpFilterByName.Value);
+                    filteredAssets = parsedAssetsList.FindAll(x => regex.IsMatch(x.Text));
+                    Logger.Info(
+                        $"Found [{filteredAssets.Count}/{assetsCount}] asset(s) ");
                     break;
             }
             parsedAssetsList.Clear();
