@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: AssetStudio.net472
-          path: AssetStudioGUI/bin/Release/net472
+          path: AssetStudioCLI/bin/Release/net472
